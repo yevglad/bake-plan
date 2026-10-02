@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="_ds/organic-2e412e13-bb5f-4a9e-97a3-381514103cd1/styles.css">
+  <script src="_ds/organic-2e412e13-bb5f-4a9e-97a3-381514103cd1/_ds_bundle.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap">
+  <style>:root{--font-heading:'Archivo Black',sans-serif;--radius-md:8px;--radius-lg:8px}body{margin:0;background:#fff}a{color:var(--color-accent)}a:hover{color:var(--color-accent-700)}.card,.dialog,.btn,.tag,.seg,.input{border-radius:8px !important}</style>
+</helmet>
+<div style="min-height:100dvh;max-width:480px;margin:0 auto;background:#fff;display:flex;flex-direction:column;font-family:var(--font-body);color:var(--color-text)">
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;flex:1;min-height:0">
+  <div style="padding:var(--space-4) var(--space-4) var(--space-2)">
+    <h1 style="font-size:28px;margin:0 0 2px;font-family:'Archivo Black',sans-serif">Baking timer</h1>
+    <p style="margin:0;font-size:13px;opacity:.65">One bake perfectly timed</p>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:0 var(--space-4) 160px">
+
+    <sc-if value="{{ hasRecent }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-bottom:var(--space-4)">
+        <h6 style="margin:0 0 var(--space-2);opacity:.6">Recent bakes</h6>
+        <div style="display:flex;gap:var(--space-2);overflow-x:auto;padding-bottom:4px">
+          <sc-for list="{{ recentBakes }}" as="rb" hint-placeholder-count="2">
+            <div class="card elev-sm" onClick="{{ rb.onLoad }}" style="cursor:pointer;flex:0 0 auto;min-width:170px;max-width:210px;background:#fff">
+              <div class="card-title" style="font-size:14px;line-height:1.3">{{ rb.label }}</div>
+              <span class="tag tag-outline" style="align-self:flex-start">{{ rb.tempLabel }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <div class="field" style="position:relative;margin-bottom:var(--space-3)">
+      <input class="input" type="text" placeholder="Search ingredients" value="{{ search }}" onChange="{{ onSearchChange }}" style="padding-left:36px;background:#fff" />
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.5"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.35-4.35"></path></svg>
+    </div>
+
+    <div class="seg" style="margin-bottom:var(--space-3);width:100%">
+      <label class="seg-opt" style="{{ catAllStyle }}"><input type="radio" name="cat" checked="{{ catAll }}" onChange="{{ onCatAll }}" />All</label>
+      <label class="seg-opt" style="{{ catVegStyle }}"><input type="radio" name="cat" checked="{{ catVeg }}" onChange="{{ onCatVeg }}" />Vegetables</label>
+      <label class="seg-opt" style="{{ catProteinStyle }}"><input type="radio" name="cat" checked="{{ catProtein }}" onChange="{{ onCatProtein }}" />Proteins</label>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr;gap:var(--space-2)">
+      <sc-for list="{{ ingredients }}" as="ing" hint-placeholder-count="8">
+        <div onClick="{{ ing.onToggle }}" style="{{ ing.cardStyle }}">
+          <div style="font-size:16px;font-weight:600;line-height:1.25">{{ ing.displayName }}</div>
+          <div style="margin-top:6px;display:flex;justify-content:space-between;align-items:center;gap:8px">
+            <div style="display:flex;align-items:center;gap:8px" onClick="{{ ing.stopClick }}">
+              <button type="button" onClick="{{ ing.onTimeDec }}" aria-label="Decrease time by 5 minutes" style="width:44px;height:44px;flex:none;padding:0;border-radius:50%;border:1px solid var(--color-divider);background:transparent;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"></path></svg></button>
+              <span style="font-size:16px;font-weight:800;color:#000;min-width:56px;text-align:center">{{ ing.timeLabel }}</span>
+              <button type="button" onClick="{{ ing.onTimeInc }}" aria-label="Increase time by 5 minutes" style="width:44px;height:44px;flex:none;padding:0;border-radius:50%;border:1px solid var(--color-divider);background:transparent;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+            </div>
+            <sc-if value="{{ ing.selected }}" hint-placeholder-val="{{ false }}">
+              <div style="{{ ing.selCircleStyle }}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+              </div>
+            </sc-if>
+            <sc-if value="{{ ing.selected == false }}" hint-placeholder-val="{{ true }}">
+              <div style="{{ ing.unselCircleStyle }}"></div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ hasNoResults }}" hint-placeholder-val="{{ false }}">
+      <p style="opacity:.5;font-size:13px;text-align:center;padding:var(--space-6) 0">No ingredients match your search.</p>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:10;border-top:1px solid var(--color-divider);background:#f8f8f8;padding:var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:var(--space-3);box-shadow:0 -4px 16px rgba(0,0,0,.08)">
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <sc-for list="{{ selectedList }}" as="sel" hint-placeholder-count="3">
+          <span class="tag" style="{{ sel.chipStyle }}" onClick="{{ sel.onRemove }}">{{ sel.name }}<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="M6 6l12 12"></path></svg></span>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ hasTimeOverrides }}" hint-placeholder-val="{{ false }}">
+        <button type="button" class="btn btn-ghost" onClick="{{ onResetTimes }}" style="padding:0;align-self:flex-end;font-size:12px;color:#000">Reset times to default</button>
+      </sc-if>
+
+      <div>
+        <div style="font-size:11px;opacity:.6;margin-bottom:5px">Oven temp — recommended {{ recTempLabel }}</div>
+        <div class="seg" style="width:100%">
+          <sc-for list="{{ tempOptions }}" as="t" hint-placeholder-count="4">
+            <label class="seg-opt" style="{{ t.style }}"><input type="radio" name="temp" checked="{{ t.checked }}" onChange="{{ t.onPick }}" />{{ t.label }}</label>
+          </sc-for>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary btn-block" onClick="{{ onGoPlan }}" style="font-size:15px;padding:12px;background:#333333">Plan the bake<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+    </div>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlan }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;flex:1;min-height:0">
+  <div style="display:flex;align-items:center;gap:var(--space-2);padding:var(--space-4) var(--space-4) var(--space-2)">
+    <button type="button" class="btn btn-ghost btn-icon" onClick="{{ onGoHome }}" aria-label="Back" style="color:#000"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg></button>
+    <h2 style="margin:0;font-size:22px;font-family:'Archivo Black',sans-serif">Your bake plan</h2>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:0 var(--space-4) var(--space-4)">
+    <div style="display:flex;gap:6px;margin-bottom:var(--space-4);flex-wrap:wrap">
+      <span class="tag tag-outline">{{ totalMinLabel }} total</span>
+      <span class="tag tag-outline">{{ tempLabel }}</span>
+      <span class="tag tag-outline">{{ prepMinLabel }} prep</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;margin-bottom:var(--space-4)">
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+        <div style="display:flex;gap:var(--space-3);padding-bottom:var(--space-4)">
+          <div style="display:flex;flex-direction:column;align-items:center;width:14px;flex:none">
+            <div style="width:14px;height:14px;border-radius:50%;background:{{ g.dotColor }};flex:none"></div>
+            <div style="width:2px;flex:1;background:var(--color-divider);margin-top:2px"></div>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.05em">{{ g.timeLabel }}</div>
+            <div class="card-title" style="font-size:17px;margin:2px 0 2px;font-family:'Archivo Black',sans-serif">{{ g.namesText }}</div>
+            <div style="font-size:12px;opacity:.65">{{ g.durationLabel }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-bottom:var(--space-4)">
+      <div class="card-kicker" style="color:#000;margin-bottom:var(--space-2)">Before you start cooking</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2)">
+        <label class="radio" style="{{ prepBoxStyle }}">
+          <input type="checkbox" checked="{{ prepChecked }}" onChange="{{ onTogglePrep }}" /><span class="dot" style="margin-top:3px"></span>
+          <span style="display:flex;flex-direction:column;gap:2px">
+            <span style="font-weight:700;font-size:14px">Prep done</span>
+            <span style="font-weight:400;opacity:.65;font-size:12px">{{ prepMinLabel }} of chopping etc.</span>
+          </span>
+        </label>
+        <label class="radio" style="{{ preheatBoxStyle }}">
+          <input type="checkbox" checked="{{ preheatChecked }}" onChange="{{ onTogglePreheat }}" /><span class="dot" style="margin-top:3px"></span>
+          <span style="display:flex;flex-direction:column;gap:2px">
+            <span style="font-weight:700;font-size:14px">Oven preheated</span>
+            <span style="font-weight:400;opacity:.65;font-size:12px">to {{ tempLabel }}</span>
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-primary btn-block" disabled="{{ startDisabled }}" onClick="{{ onStartCooking }}" style="font-size:15px;padding:12px;background:#333333">Start cooking<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isCooking }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;flex:1;min-height:0">
+  <div style="padding:var(--space-4) var(--space-4) 0">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-3);gap:var(--space-2)">
+      <sc-if value="{{ started }}" hint-placeholder-val="{{ false }}">
+        <button type="button" class="btn btn-ghost" onClick="{{ onCancelCooking }}" style="padding-inline:0;color:#000">End bake</button>
+      </sc-if>
+      <sc-if value="{{ notStarted }}" hint-placeholder-val="{{ true }}">
+        <button type="button" class="btn btn-ghost" onClick="{{ onBackToPlan }}" style="padding-inline:0;color:#000;display:inline-flex;align-items:center;gap:4px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg>Back to plan</button>
+      </sc-if>
+      <div style="display:flex;align-items:center;gap:var(--space-2);margin-left:auto">
+        <span class="tag tag-outline">{{ tempLabel }}</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="flex:1;overflow-y:auto;padding:0 var(--space-4) var(--space-4);display:flex;flex-direction:column;gap:var(--space-4)">
+    <sc-if value="{{ notStarted }}" hint-placeholder-val="{{ true }}">
+      <div style="text-align:center">
+        <div style="font-size:13px;opacity:.6;margin-bottom:2px">{{ remainingCaption }}</div>
+        <div style="font-family:'Archivo Black',sans-serif;font-size:52px;line-height:1">{{ remainingLabel }}</div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ started }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;width:200px;height:200px;margin:0 auto">
+        <svg width="200" height="200" viewBox="0 0 120 120" style="transform:rotate(-90deg)">
+          <circle cx="60" cy="60" r="54" fill="none" stroke="var(--color-neutral-300)" stroke-width="8"></circle>
+          <circle cx="60" cy="60" r="54" fill="none" stroke="var(--color-accent)" stroke-width="8" stroke-linecap="round" style="{{ ringProgressStyle }}"></circle>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+          <div style="font-size:13px;opacity:.6;margin-bottom:2px">{{ remainingCaption }}</div>
+          <div style="font-family:'Archivo Black',sans-serif;font-size:34px;line-height:1">{{ remainingLabel }}</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ notStarted }}" hint-placeholder-val="{{ true }}">
+      <button type="button" class="btn btn-primary" onClick="{{ onBeginTimer }}" style="font-size:14px;padding:9px 20px;background:#333333;color:#fff;margin:-16px auto 0;align-self:center">Start timer</button>
+    </sc-if>
+    <sc-if value="{{ timerRunning }}" hint-placeholder-val="{{ false }}">
+      <button type="button" class="btn btn-secondary" onClick="{{ onPauseTimer }}" style="font-size:14px;padding:9px 20px;margin:-16px auto 0;align-self:center">Pause</button>
+    </sc-if>
+    <sc-if value="{{ pausedNow }}" hint-placeholder-val="{{ false }}">
+      <button type="button" class="btn btn-primary" onClick="{{ onResumeTimer }}" style="font-size:14px;padding:9px 20px;background:#333333;color:#fff;margin:-16px auto 0;align-self:center">Resume timer</button>
+    </sc-if>
+
+    <div class="card elev-sm" style="background:#fff;border:3px solid var(--color-accent)">
+      <div class="card-kicker" style="color:#000">Now in the oven</div>
+      <div class="card-title" style="font-size:16px">{{ nowInOvenText }}</div>
+      <sc-if value="{{ hasPending }}" hint-placeholder-val="{{ false }}">
+        <div style="border-top:1px solid var(--color-divider);margin-top:var(--space-2);padding-top:var(--space-3);display:flex;flex-direction:column;gap:var(--space-2);align-items:center;text-align:center">
+          <div style="font-size:14px;font-weight:600">Confirm {{ pendingText }} {{ pendingAreIs }} in the oven</div>
+          <button type="button" class="btn btn-primary btn-block" onClick="{{ onAckPrompt }}">Yes</button>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ hasUpNext }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <h6 style="color:#000;opacity:1;margin:0 0 var(--space-2);display:flex;justify-content:space-between;align-items:center">Up next<span style="font-weight:700;color:#000">{{ nextInLabel }}</span></h6>
+        <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+          <sc-for list="{{ upNext }}" as="u" hint-placeholder-count="2">
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8a8a8a;margin-bottom:6px">{{ u.sectionLabel }}</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <sc-for list="{{ u.itemRows }}" as="row" hint-placeholder-count="1">
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-2);padding:10px 12px;border-radius:8px;background:{{ row.color }}">
+                    <span style="font-size:13px;font-weight:600">{{ row.name }}</span>
+                    <span style="font-size:12px;font-weight:700;opacity:.7;flex:none">{{ row.timeLabel }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:var(--space-6);text-align:center;gap:var(--space-4)">
+  <div style="width:64px;height:64px;border-radius:50%;background:var(--color-accent-2-100);display:flex;align-items:center;justify-content:center">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#3d472b" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+  </div>
+  <h2 style="margin:0;font-family:'Archivo Black',sans-serif">Bake's done!</h2>
+  <p style="margin:0;opacity:.7;font-size:14px;max-width:280px">{{ finishedItemsText }} · {{ finishedTempLabel }} · {{ finishedTotalLabel }}</p>
+  <button type="button" class="btn btn-primary btn-block" onClick="{{ onNewBake }}" style="max-width:260px">Start a new bake</button>
+</div>
+</sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844},&quot;soundEnabled&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Cooking alerts&quot;},&quot;defaultOvenTemp&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:400,&quot;tsType&quot;:&quot;number&quot;,&quot;options&quot;:[375,400,425,450],&quot;section&quot;:&quot;Cooking alerts&quot;},&quot;demoScenario&quot;:{&quot;editor&quot;:null,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const INGREDIENTS = [
+  { id: 'sweet-potato', name: 'Sweet potato', note: 'cubed, 1-inch', cat: 'veg', time: 40, temp: 400, color: 'oklch(95% 0.06 55)' },
+  { id: 'beets', name: 'Beets', note: 'cubed', cat: 'veg', time: 40, temp: 400, color: 'oklch(94% 0.05 15)' },
+  { id: 'butternut-squash', name: 'Butternut squash', note: 'cubed', cat: 'veg', time: 35, temp: 400, color: 'oklch(95% 0.06 60)' },
+  { id: 'potatoes', name: 'Potatoes', note: 'cubed', cat: 'veg', time: 35, temp: 400, color: 'oklch(95% 0.02 80)' },
+  { id: 'carrots', name: 'Carrots', note: 'cut into strips', cat: 'veg', time: 30, temp: 400, color: 'oklch(95% 0.07 50)' },
+  { id: 'brussels-sprouts', name: 'Brussels sprouts', note: 'halved', cat: 'veg', time: 25, temp: 400, color: 'oklch(95% 0.05 145)' },
+  { id: 'cauliflower', name: 'Cauliflower', note: 'florets', cat: 'veg', time: 25, temp: 400, color: 'oklch(97% 0.01 90)' },
+  { id: 'eggplant', name: 'Eggplant', note: 'cubed', cat: 'veg', time: 25, temp: 400, color: 'oklch(93% 0.05 310)' },
+  { id: 'red-onion', name: 'Red onion', note: 'wedges', cat: 'veg', time: 20, temp: 400, color: 'oklch(93% 0.05 340)' },
+  { id: 'broccoli', name: 'Broccoli', note: 'florets', cat: 'veg', time: 20, temp: 400, color: 'oklch(94% 0.06 140)' },
+  { id: 'bell-peppers', name: 'Bell peppers', note: 'sliced', cat: 'veg', time: 20, temp: 400, color: 'oklch(94% 0.06 25)' },
+  { id: 'green-beans', name: 'Green beans', note: 'trimmed', cat: 'veg', time: 15, temp: 400, color: 'oklch(95% 0.05 135)' },
+  { id: 'zucchini', name: 'Zucchini', note: 'sliced', cat: 'veg', time: 15, temp: 400, color: 'oklch(95% 0.04 130)' },
+  { id: 'cherry-tomatoes', name: 'Cherry tomatoes', note: 'whole', cat: 'veg', time: 15, temp: 400, color: 'oklch(94% 0.06 20)' },
+  { id: 'asparagus', name: 'Asparagus', note: 'trimmed', cat: 'veg', time: 12, temp: 400, color: 'oklch(95% 0.05 140)' },
+  { id: 'parsnips', name: 'Parsnips', note: 'cubed', cat: 'veg', time: 35, temp: 400, color: 'oklch(96% 0.02 85)' },
+  { id: 'turnips', name: 'Turnips', note: 'cubed', cat: 'veg', time: 30, temp: 400, color: 'oklch(95% 0.03 100)' },
+  { id: 'red-cabbage', name: 'Red cabbage', note: 'wedges', cat: 'veg', time: 25, temp: 400, color: 'oklch(92% 0.06 330)' },
+  { id: 'fennel', name: 'Fennel', note: 'sliced', cat: 'veg', time: 25, temp: 400, color: 'oklch(96% 0.02 120)' },
+  { id: 'mushrooms', name: 'Mushrooms', note: 'halved', cat: 'veg', time: 20, temp: 400, color: 'oklch(92% 0.02 60)' },
+  { id: 'corn', name: 'Corn on the cob', note: 'cut into rounds', cat: 'veg', time: 20, temp: 400, color: 'oklch(94% 0.08 95)' },
+  { id: 'artichoke-hearts', name: 'Artichoke hearts', note: 'quartered', cat: 'veg', time: 20, temp: 400, color: 'oklch(94% 0.04 130)' },
+  { id: 'kale', name: 'Kale', note: 'torn', cat: 'veg', time: 10, temp: 400, color: 'oklch(93% 0.05 145)' },
+  { id: 'chicken-thighs', name: 'Chicken thighs', note: 'bone-in', cat: 'protein', time: 40, temp: 425, color: 'oklch(95% 0.02 70)' },
+  { id: 'italian-sausage', name: 'Italian sausage', note: 'links', cat: 'protein', time: 30, temp: 400, color: 'oklch(93% 0.04 35)' },
+  { id: 'chicken-breast', name: 'Chicken breast', note: 'boneless', cat: 'protein', time: 25, temp: 400, color: 'oklch(96% 0.02 40)' },
+  { id: 'chicken-sausage', name: 'Chicken sausage', note: 'links', cat: 'protein', time: 25, temp: 400, color: 'oklch(95% 0.02 75)' },
+  { id: 'salmon', name: 'Salmon fillet', note: '6oz', cat: 'protein', time: 15, temp: 400, color: 'oklch(94% 0.06 30)' },
+  { id: 'shrimp', name: 'Shrimp', note: 'peeled', cat: 'protein', time: 9, temp: 400, color: 'oklch(94% 0.06 35)' },
+  { id: 'pork-tenderloin', name: 'Pork tenderloin', note: 'sliced medallions', cat: 'protein', time: 25, temp: 400, color: 'oklch(94% 0.04 25)' },
+  { id: 'flank-steak', name: 'Flank steak', note: 'sliced', cat: 'protein', time: 20, temp: 425, color: 'oklch(90% 0.04 30)' },
+  { id: 'cod', name: 'Cod fillet', note: '6oz', cat: 'protein', time: 15, temp: 400, color: 'oklch(96% 0.02 40)' },
+  { id: 'tofu', name: 'Tofu', note: 'cubed', cat: 'protein', time: 25, temp: 400, color: 'oklch(97% 0.01 90)' },
+  { id: 'turkey-sausage', name: 'Turkey sausage', note: 'links', cat: 'protein', time: 25, temp: 400, color: 'oklch(93% 0.03 50)' },
+];
+
+class Component extends DCLogic {
+  state = {
+    step: 'home',
+    search: '',
+    catFilter: 'all',
+    selectedIds: [],
+    tempOverride: null,
+    prepOverride: null,
+    prepChecked: false,
+    preheatChecked: false,
+    recent: [],
+    timeOverrides: {},
+    ackedCount: 0,
+    elapsedSec: 0,
+    running: false,
+    started: false,
+    promptIdx: null,
+  };
+
+  componentDidMount() {
+    if (this.props.demoScenario) { this.applyDemoScenario(this.props.demoScenario); return; }
+    try {
+      const raw = localStorage.getItem('bakeplan_recent_v1');
+      if (raw) this.setState({ recent: JSON.parse(raw) });
+    } catch (e) {}
+  }
+
+  applyDemoScenario = (key) => {
+    const sel = ['sweet-potato', 'chicken-thighs', 'broccoli'];
+    const demoRecent = [
+      { key: 'demo-1', ids: ['salmon', 'asparagus'], temp: 400, prep: 15, label: 'Salmon fillet, Asparagus', savedAt: Date.now() },
+      { key: 'demo-2', ids: ['chicken-breast', 'cauliflower', 'red-onion'], temp: 400, prep: 20, label: 'Chicken breast, Cauliflower, Red onion', savedAt: Date.now() },
+    ];
+    const presets = {
+      'home-empty': { step: 'home', selectedIds: [], recent: [] },
+      'home-recent': { step: 'home', selectedIds: [], recent: demoRecent },
+      'home-selected': { step: 'home', selectedIds: sel, recent: [] },
+      'plan': { step: 'plan', selectedIds: sel, prepChecked: false, preheatChecked: false },
+      'cooking-notstarted': { step: 'cooking', selectedIds: sel, started: false, running: false, ackedCount: 0, elapsedSec: 0, promptIdx: null },
+      'cooking-running': { step: 'cooking', selectedIds: sel, started: true, running: true, ackedCount: 1, elapsedSec: 300, promptIdx: null },
+      'cooking-prompt': { step: 'cooking', selectedIds: sel, started: true, running: true, ackedCount: 1, elapsedSec: 1200, promptIdx: 1 },
+      'cooking-paused': { step: 'cooking', selectedIds: sel, started: true, running: false, ackedCount: 1, elapsedSec: 300, promptIdx: null },
+      'done': { step: 'done', selectedIds: sel, started: true, running: false, ackedCount: 2, elapsedSec: 2400, promptIdx: null },
+    };
+    if (presets[key]) this.setState(presets[key]);
+  };
+
+  componentWillUnmount() {
+    this.stopTimer();
+    this.releaseWakeLock();
+  }
+
+  effectiveTime = (id) => {
+    const ov = this.state.timeOverrides[id];
+    if (ov != null) return ov;
+    const raw = INGREDIENTS.find(i => i.id === id);
+    return raw ? raw.time : 0;
+  };
+
+  resetTimes = () => this.setState({ timeOverrides: {} });
+
+  adjustIngredientTime = (id, delta) => {
+    const cur = this.effectiveTime(id);
+    const v = Math.max(5, Math.min(180, cur + delta));
+    this.setState(s => ({ timeOverrides: { ...s.timeOverrides, [id]: v } }));
+  };
+
+  getSelected = () => this.state.selectedIds.map(id => INGREDIENTS.find(i => i.id === id)).filter(Boolean).map(i => ({ ...i, time: this.effectiveTime(i.id) }));
+
+  computeGroups = (selected) => {
+    if (!selected.length) return [];
+    const total = Math.max(...selected.map(i => i.time));
+    const byTime = {};
+    selected.forEach(i => { (byTime[i.time] = byTime[i.time] || []).push(i); });
+    const times = Object.keys(byTime).map(Number).sort((a, b) => b - a);
+    return times.map(t => ({
+      addAt: total - t,
+      duration: t,
+      items: byTime[t],
+      namesText: byTime[t].map(i => i.name + ' (' + i.note + ')').join(', '),
+    }));
+  };
+
+  modeTemp = (list) => {
+    if (!list.length) return null;
+    const counts = {};
+    list.forEach(t => { counts[t] = (counts[t] || 0) + 1; });
+    let best = null, bestCount = -1;
+    Object.keys(counts).forEach(k => {
+      const n = Number(k), c = counts[k];
+      if (c > bestCount || (c === bestCount && Math.abs(n - 400) < Math.abs((best ?? 400) - 400))) { best = n; bestCount = c; }
+    });
+    return best;
+  };
+
+  toggleIngredient = (id) => {
+    this.setState(s => {
+      const has = s.selectedIds.includes(id);
+      return { selectedIds: has ? s.selectedIds.filter(x => x !== id) : [...s.selectedIds, id] };
+    });
+  };
+
+  setSearch = (e) => this.setState({ search: e.target.value });
+  setCatFilter = (cat) => this.setState({ catFilter: cat });
+  setTemp = (val) => this.setState({ tempOverride: val });
+
+  prepSuggestion = (count) => {
+    if (!count) return 15;
+    const raw = 8 + count * 4;
+    const rounded = Math.round(raw / 5) * 5;
+    return Math.min(35, Math.max(10, rounded));
+  };
+
+  incPrep = () => this.setState(s => ({ prepOverride: Math.min(60, (s.prepOverride ?? this.prepSuggestion(s.selectedIds.length)) + 5) }));
+  decPrep = () => this.setState(s => ({ prepOverride: Math.max(5, (s.prepOverride ?? this.prepSuggestion(s.selectedIds.length)) - 5) }));
+
+  effectiveTemp = (selected) => {
+    selected = selected || this.getSelected();
+    if (this.state.tempOverride != null) return this.state.tempOverride;
+    const rec = this.modeTemp(selected.map(i => i.temp));
+    return rec ?? (this.props.defaultOvenTemp ?? 400);
+  };
+
+  effectivePrep = () => this.state.prepOverride ?? this.prepSuggestion(this.state.selectedIds.length);
+
+  saveRecent = () => {
+    const selected = this.getSelected();
+    if (!selected.length) return;
+    const ids = [...this.state.selectedIds].sort();
+    const temp = this.effectiveTemp(selected);
+    const prep = this.effectivePrep();
+    const key = ids.join(',') + '|' + temp;
+    let recent = this.state.recent.filter(r => r.key !== key);
+    recent.unshift({ key, ids: this.state.selectedIds, temp, prep, label: selected.map(i => i.name).join(', '), savedAt: Date.now() });
+    recent = recent.slice(0, 6);
+    this.setState({ recent });
+    try { localStorage.setItem('bakeplan_recent_v1', JSON.stringify(recent)); } catch (e) {}
+  };
+
+  goPlan = () => {
+    if (!this.state.selectedIds.length) return;
+    this.saveRecent();
+    this.setState({ step: 'plan', prepChecked: false, preheatChecked: false });
+  };
+
+  goHome = () => this.setState({ step: 'home' });
+  loadRecent = (rb) => this.setState({ selectedIds: [...rb.ids], tempOverride: rb.temp, prepOverride: rb.prep });
+  togglePrepChecked = () => this.setState(s => ({ prepChecked: !s.prepChecked }));
+  togglePreheatChecked = () => this.setState(s => ({ preheatChecked: !s.preheatChecked }));
+
+  requestWakeLock = async () => {
+    try { if (navigator.wakeLock) this.wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {}
+  };
+  releaseWakeLock = () => {
+    try { this.wakeLock && this.wakeLock.release(); } catch (e) {}
+    this.wakeLock = null;
+  };
+
+  playChime = () => {
+    if (this.props.soundEnabled === false) return;
+    try {
+      const ctx = this._actx || (this._actx = new (window.AudioContext || window.webkitAudioContext)());
+      [0, 0.22].forEach(delay => {
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.type = 'sine'; osc.frequency.value = 880;
+        gain.gain.value = 0.0001;
+        osc.connect(gain); gain.connect(ctx.destination);
+        const t = ctx.currentTime + delay;
+        gain.gain.exponentialRampToValueAtTime(0.18, t + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+        osc.start(t); osc.stop(t + 0.2);
+      });
+    } catch (e) {}
+    try { navigator.vibrate && navigator.vibrate([200, 80, 200]); } catch (e) {}
+  };
+
+  stopTimer = () => { if (this.timerHandle) { clearInterval(this.timerHandle); this.timerHandle = null; } };
+
+  startCooking = () => {
+    const groups = this.computeGroups(this.getSelected());
+    if (!groups.length) return;
+    this.setState({ step: 'cooking', ackedCount: 0, elapsedSec: 0, running: false, started: false, promptIdx: null });
+  };
+
+  backToPlan = () => this.setState({ step: 'plan' });
+
+  beginTimer = () => {
+    this.startTs = Date.now();
+    this.setState({ ackedCount: 1, elapsedSec: 0, running: true, started: true, promptIdx: null });
+    this.requestWakeLock();
+    this.stopTimer();
+    this.timerHandle = setInterval(this.tick, 250);
+  };
+
+  pauseTimer = () => {
+    if (!this.state.running) return;
+    this.stopTimer();
+    this.pausedAt = Date.now();
+    this.setState({ running: false });
+  };
+
+  resumeTimer = () => {
+    if (this.state.running) return;
+    const now = Date.now();
+    this.startTs += now - this.pausedAt;
+    this.setState({ running: true });
+    this.timerHandle = setInterval(this.tick, 250);
+  };
+
+  tick = () => {
+    const groups = this.computeGroups(this.getSelected());
+    const totalSec = (groups.length ? Math.max(...groups.map(g => g.addAt + g.duration)) : 0) * 60;
+    const elapsedSec = Math.round((Date.now() - this.startTs) / 1000);
+    let promptIdx = this.state.promptIdx;
+    if (promptIdx == null && this.state.ackedCount < groups.length) {
+      const next = groups[this.state.ackedCount];
+      if (elapsedSec >= next.addAt * 60) { promptIdx = this.state.ackedCount; this.playChime(); }
+    }
+    if (elapsedSec >= totalSec && promptIdx == null) {
+      this.stopTimer();
+      this.releaseWakeLock();
+      this.setState({ step: 'done', running: false, elapsedSec: totalSec });
+      return;
+    }
+    this.setState({ elapsedSec, promptIdx });
+  };
+
+  ackPrompt = () => this.setState(s => ({ ackedCount: s.promptIdx + 1, promptIdx: null }));
+
+  cancelCooking = () => {
+    this.stopTimer();
+    this.releaseWakeLock();
+    this.setState({ step: 'plan', running: false });
+  };
+
+  newBake = () => {
+    this.setState({ step: 'home', selectedIds: [], tempOverride: null, prepOverride: null, prepChecked: false, preheatChecked: false, ackedCount: 0, elapsedSec: 0, running: false, started: false, promptIdx: null });
+  };
+
+  fmtTime = (secs) => {
+    secs = Math.max(0, Math.round(secs));
+    const m = Math.floor(secs / 60), s = secs % 60;
+    return m + ':' + (s < 10 ? '0' : '') + s;
+  };
+
+  renderVals() {
+    const s = this.state;
+    const allSelected = this.getSelected();
+    const groups = this.computeGroups(allSelected);
+    const totalMin = groups.length ? Math.max(...groups.map(g => g.addAt + g.duration)) : 0;
+    const recTemp = this.modeTemp(allSelected.map(i => i.temp)) ?? (this.props.defaultOvenTemp ?? 400);
+    const temp = this.effectiveTemp(allSelected);
+    const prep = this.effectivePrep();
+
+    const q = s.search.trim().toLowerCase();
+    const ingredients = INGREDIENTS.filter(i => {
+      if (s.catFilter !== 'all' && i.cat !== s.catFilter) return false;
+      if (q && !i.name.toLowerCase().includes(q)) return false;
+      return true;
+    }).map(i => {
+      const selected = s.selectedIds.includes(i.id);
+      const time = this.effectiveTime(i.id);
+      const darkColor = 'color-mix(in oklch, ' + i.color + ' 55%, black)';
+      return {
+        ...i, selected, time,
+        selCircleStyle: { width: '44px', height: '44px', flex: 'none', borderRadius: '50%', background: darkColor, display: 'flex', alignItems: 'center', justifyContent: 'center' },
+        unselCircleStyle: { width: '44px', height: '44px', flex: 'none', borderRadius: '50%', border: '2px solid ' + darkColor, background: '#fff' },
+        catLabel: i.cat === 'veg' ? 'Vegetable' : 'Protein',
+        catTagClass: i.cat === 'veg' ? 'tag tag-accent-2' : 'tag tag-accent',
+        displayName: i.name + ' - ' + i.note,
+        timeLabel: time + ' min',
+        onTimeDec: () => this.adjustIngredientTime(i.id, -5),
+        onTimeInc: () => this.adjustIngredientTime(i.id, 5),
+        stopClick: (e) => e.stopPropagation(),
+        onToggle: () => this.toggleIngredient(i.id),
+        cardStyle: {
+          display: 'flex', flexDirection: 'column', gap: '6px', cursor: 'pointer',
+          padding: 'var(--space-3)', borderRadius: 'var(--radius-md)',
+          background: i.color,
+          border: selected ? '2px solid ' + darkColor : '1px solid var(--color-divider)',
+          position: 'relative',
+        },
+      };
+    });
+
+    const selectedList = allSelected.map(i => ({
+      id: i.id, name: i.name, onRemove: () => this.toggleIngredient(i.id),
+      chipStyle: { display: 'inline-flex', alignItems: 'center', gap: '5px', cursor: 'pointer', background: i.color, color: 'var(--color-text)' },
+    }));
+    const hasTimeOverrides = allSelected.some(i => s.timeOverrides[i.id] != null);
+
+    const tempOptions = [375, 400, 425, 450].map(t => ({ value: t, label: t + '°', checked: temp === t, onPick: () => this.setTemp(t), style: { flex: 1, justifyContent: 'center', ...(temp === t ? { background: '#333333', color: '#fff' } : {}) } }));
+
+    const groupsView = groups.map((g, idx) => ({
+      idx,
+      timeLabel: g.addAt === 0 ? 'Start' : 'at +' + g.addAt + ' min',
+      namesText: g.namesText,
+      durationLabel: 'cooks ' + g.duration + ' min',
+      dotColor: g.items[0].color,
+    }));
+
+    const recentBakes = s.recent.map(rb => ({ ...rb, tempLabel: rb.temp + '°F', onLoad: () => this.loadRecent(rb) }));
+
+    const startDisabled = !(s.prepChecked && s.preheatChecked && groups.length > 0);
+
+    const totalSec = totalMin * 60;
+    const nowInOven = groups.slice(0, s.ackedCount).flatMap(g => g.items.map(i => i.name));
+    const pendingGroup = s.promptIdx != null ? groups[s.promptIdx] : null;
+    const upNext = groups.slice(s.ackedCount).filter((g, i) => !(s.promptIdx != null && i === 0)).map(g => ({
+      sectionLabel: g.addAt === 0 ? 'Starting now' : 'At +' + g.addAt + ' min mark',
+      itemRows: g.items.map(i => ({ name: i.name + ' (' + i.note + ')', timeLabel: i.time + ' min', color: i.color })),
+    }));
+    const nextUnackedIdx = s.promptIdx != null ? s.promptIdx + 1 : s.ackedCount;
+    const nextGroup = groups[nextUnackedIdx] || null;
+    const nextInLabel = nextGroup ? 'in ' + this.fmtTime(Math.max(0, nextGroup.addAt * 60 - s.elapsedSec)) : '';
+    const remaining = Math.max(0, totalSec - s.elapsedSec);
+    const progressPct = totalSec ? Math.min(100, Math.round((s.elapsedSec / totalSec) * 100)) : 0;
+    const ringFrac = totalSec ? Math.min(1, s.elapsedSec / totalSec) : 0;
+    const ringCirc = 2 * Math.PI * 54;
+    const ringOffset = ringCirc * (1 - ringFrac);
+
+    return {
+      isHome: s.step === 'home', isPlan: s.step === 'plan', isCooking: s.step === 'cooking', isDone: s.step === 'done',
+      search: s.search, onSearchChange: this.setSearch,
+      catAll: s.catFilter === 'all', catVeg: s.catFilter === 'veg', catProtein: s.catFilter === 'protein',
+      onCatAll: () => this.setCatFilter('all'), onCatVeg: () => this.setCatFilter('veg'), onCatProtein: () => this.setCatFilter('protein'),
+      catAllStyle: { flex: 1, justifyContent: 'center', ...(s.catFilter === 'all' ? { background: '#e6e6e6', color: 'var(--color-text)' } : {}) },
+      catVegStyle: { flex: 1, justifyContent: 'center', ...(s.catFilter === 'veg' ? { background: '#e6e6e6', color: 'var(--color-text)' } : {}) },
+      catProteinStyle: { flex: 1, justifyContent: 'center', ...(s.catFilter === 'protein' ? { background: '#e6e6e6', color: 'var(--color-text)' } : {}) },
+      ingredients, hasNoResults: ingredients.length === 0,
+      hasSelection: allSelected.length > 0,
+      selectedList, tempOptions, hasTimeOverrides, onResetTimes: this.resetTimes,
+      recTempLabel: recTemp + '°F',
+      prepLabel: prep + ' min',
+      onIncPrep: this.incPrep, onDecPrep: this.decPrep,
+      hasRecent: recentBakes.length > 0, recentBakes,
+      onGoPlan: this.goPlan, onGoHome: this.goHome,
+      totalMinLabel: totalMin + ' min',
+      tempLabel: temp + '°F',
+      prepMinLabel: prep + ' min',
+      groups: groupsView,
+      prepChecked: s.prepChecked, preheatChecked: s.preheatChecked,
+      prepBoxStyle: { display: 'flex', alignItems: 'flex-start', gap: '8px', padding: 'var(--space-3)', borderRadius: '8px', background: s.prepChecked ? 'var(--color-accent-100)' : '#fff', border: s.prepChecked ? '2px solid var(--color-accent)' : '1px solid var(--color-divider)', cursor: 'pointer' },
+      preheatBoxStyle: { display: 'flex', alignItems: 'flex-start', gap: '8px', padding: 'var(--space-3)', borderRadius: '8px', background: s.preheatChecked ? 'var(--color-accent-100)' : '#fff', border: s.preheatChecked ? '2px solid var(--color-accent)' : '1px solid var(--color-divider)', cursor: 'pointer' },
+      onTogglePrep: this.togglePrepChecked, onTogglePreheat: this.togglePreheatChecked,
+      startDisabled, onStartCooking: this.startCooking,
+      onCancelCooking: this.cancelCooking,
+      onBackToPlan: this.backToPlan,
+      started: s.started, notStarted: !s.started, timerRunning: s.running, notRunning: !s.running,
+      pausedNow: s.started && !s.running,
+      remainingCaption: s.started ? (s.running ? 'Time remaining' : 'Time remaining - Paused') : 'Total time',
+      onBeginTimer: this.beginTimer, onPauseTimer: this.pauseTimer, onResumeTimer: this.resumeTimer,
+      nowInOvenText: s.started ? nowInOven.join(', ') : 'Nothing in oven, tap start timer',
+      hasPending: !!pendingGroup,
+      pendingText: pendingGroup ? pendingGroup.namesText : '',
+      pendingAreIs: pendingGroup && pendingGroup.items.length === 1 ? 'is' : 'are',
+      onAckPrompt: this.ackPrompt,
+      upNext, hasUpNext: upNext.length > 0, nextInLabel,
+      remainingLabel: this.fmtTime(remaining),
+      progressStyle: { height: '100%', background: 'var(--color-accent)', width: progressPct + '%', borderRadius: '999px', transition: 'width .4s ease' },
+      ringProgressStyle: { strokeDasharray: ringCirc + ' ' + ringCirc, strokeDashoffset: ringOffset, transition: 'stroke-dashoffset .4s ease' },
+      finishedTotalLabel: totalMin + ' min total',
+      finishedTempLabel: temp + '°F',
+      finishedItemsText: allSelected.map(i => i.name).join(', '),
+      onNewBake: this.newBake,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

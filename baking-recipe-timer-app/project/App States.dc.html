@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="stylesheet" href="_ds/organic-2e412e13-bb5f-4a9e-97a3-381514103cd1/styles.css">
+  <script src="_ds/organic-2e412e13-bb5f-4a9e-97a3-381514103cd1/_ds_bundle.js"></script>
+  <style>body{margin:0}</style>
+</helmet>
+<div style="padding:56px;display:flex;flex-direction:column;gap:44px;font-family:var(--font-body);color:var(--color-text);width:max-content">
+  <div>
+    <h1 style="margin:0 0 4px;font-size:32px">Bake Plan — every page &amp; state</h1>
+    <p style="margin:0;opacity:.65;font-size:14px">Live captures of the component, one frame per screen state.</p>
+  </div>
+
+  <div>
+    <h6 style="margin:0 0 16px;opacity:.6;text-transform:uppercase;letter-spacing:.06em">Pick ingredients</h6>
+    <div style="display:flex;gap:28px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span class="tag tag-outline">Empty</span>
+        <div style="width:220px;height:477px;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--color-divider)">
+          <div style="width:390px;height:844px;transform:scale(0.5641);transform-origin:top left">
+            <dc-import name="Bake Plan" demo-scenario="home-empty" hint-size="390px,844px"></dc-import>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span class="tag tag-outline">With recent bakes</span>
+        <div style="width:220px;height:477px;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--color-divider)">
+          <div style="width:390px;height:844px;transform:scale(0.5641);transform-origin:top left">
+            <dc-import name="Bake Plan" demo-scenario="home-recent" hint-size="390px,844px"></dc-import>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span class="tag tag-outline">Ingredients selected</span>
+        <div style="width:220px;height:477px;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--color-divider)">
+          <div style="width:390px;height:844px;transform:scale(0.5641);transform-origin:top left">
+            <dc-import name="Bake Plan" demo-scenario="home-selected" hint-size="390px,844px"></dc-import>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h6 style="margin:0 0 16px;opacity:.6;text-transform:uppercase;letter-spacing:.06em">Bake plan</h6>
+    <div style="display:flex;gap:28px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span class="tag tag-outline">Checklist</span>
+        <div style="width:220px;height:477px;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--color-divider)">
+          <div style="width:390px;height:844px;transform:scale(0.5641);transform-origin:top left">
+            <dc-import name="Bake Plan" demo-scenario="plan" hint-size="390px,844px"></dc-import>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h6 style="margin:0 0 16px;opacity:.6;text-transform:uppercase;letter-spacing:.06em">Cooking</h6>
+    <div style="display:flex;gap:28px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span class="tag tag-outline">Not started</span>
+        <div style="width:220px;height:477px;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--color-divider)">
+          <div style="width:390px;height:844px;transform:scale(0.5641);transform-origin:top left">
+            <dc-import name="Bake Plan" demo-scenario="cooking-notstarted" hint-size="390px,844px"></dc-import>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span class="tag tag-outline">Running</span>
+        <div style="width:220px;height:477px;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--color-divider)">
+          <div style="width:390px;height:844px;transform:scale(0.5641);transform-origin:top left">
+            <dc-import name="Bake Plan" demo-scenario="cooking-running" hint-size="390px,844px"></dc-import>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span class="tag tag-outline">Ingredient prompt</span>
+        <div style="width:220px;height:477px;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--color-divider)">
+          <div style="width:390px;height:844px;transform:scale(0.5641);transform-origin:top left">
+            <dc-import name="Bake Plan" demo-scenario="cooking-prompt" hint-size="390px,844px"></dc-import>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span class="tag tag-outline">Paused</span>
+        <div style="width:220px;height:477px;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--color-divider)">
+          <div style="width:390px;height:844px;transform:scale(0.5641);transform-origin:top left">
+            <dc-import name="Bake Plan" demo-scenario="cooking-paused" hint-size="390px,844px"></dc-import>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h6 style="margin:0 0 16px;opacity:.6;text-transform:uppercase;letter-spacing:.06em">Done</h6>
+    <div style="display:flex;gap:28px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span class="tag tag-outline">Bake complete</span>
+        <div style="width:220px;height:477px;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--color-divider)">
+          <div style="width:390px;height:844px;transform:scale(0.5641);transform-origin:top left">
+            <dc-import name="Bake Plan" demo-scenario="done" hint-size="390px,844px"></dc-import>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

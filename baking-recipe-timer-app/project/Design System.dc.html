@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="stylesheet" href="_ds/organic-2e412e13-bb5f-4a9e-97a3-381514103cd1/styles.css">
+  <script src="_ds/organic-2e412e13-bb5f-4a9e-97a3-381514103cd1/_ds_bundle.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap">
+  <style>:root{--font-heading:'Archivo Black',sans-serif}body{margin:0}</style>
+</helmet>
+<div style="padding:56px;display:flex;flex-direction:column;gap:48px;font-family:var(--font-body);color:#111;width:820px">
+
+  <div>
+    <h1 style="margin:0 0 6px;font-size:34px">Bake Plan — design system</h1>
+    <p style="margin:0;font-size:14px;opacity:.65;max-width:560px">Built on the Organic design system (Figtree body, rounded components), with app-specific overrides layered on top: Archivo Black headings, 8px corners, a neutral grey UI chrome, and a per-ingredient color key.</p>
+  </div>
+
+  <div>
+    <h6 style="margin:0 0 16px;opacity:.55;text-transform:uppercase;letter-spacing:.06em;font-size:12px">Color roles</h6>
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+      <sc-for list="{{ colorRoles }}" as="c" hint-placeholder-count="6">
+        <div style="width:140px">
+          <div style="{{ c.swatchStyle }}"></div>
+          <div style="font-size:13px;font-weight:700;margin-top:8px">{{ c.name }}</div>
+          <div style="font-size:11px;opacity:.55;font-family:ui-monospace,monospace">{{ c.value }}</div>
+          <div style="font-size:11px;opacity:.55">{{ c.usage }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div>
+    <h6 style="margin:0 0 16px;opacity:.55;text-transform:uppercase;letter-spacing:.06em;font-size:12px">Ingredient color key</h6>
+    <p style="margin:0 0 14px;font-size:13px;opacity:.6;max-width:560px">Every ingredient card is tinted to match the real color of the food — a light oklch tint at rest, a darker version of the same hue for the selection outline and checkmark.</p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+      <sc-for list="{{ ingredientSwatches }}" as="ing" hint-placeholder-count="8">
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:{{ ing.color }}">
+          <div style="{{ ing.dotStyle }}"></div>
+          <span style="font-size:12px;font-weight:600">{{ ing.name }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div>
+    <h6 style="margin:0 0 16px;opacity:.55;text-transform:uppercase;letter-spacing:.06em;font-size:12px">Typography</h6>
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div>
+        <div style="font-family:'Archivo Black',sans-serif;font-size:32px;line-height:1.1">Baking timer</div>
+        <div style="font-size:11px;opacity:.5;margin-top:4px">Archivo Black — page titles, card titles, timer display, button labels (overrides the system's default Caprasimo)</div>
+      </div>
+      <div>
+        <div style="font-family:var(--font-body);font-size:15px;line-height:1.55;max-width:520px">Sweet potato - cubed, 1-inch. One bake, perfectly timed — recommended oven temp and prep time adjust automatically as you build your tray.</div>
+        <div style="font-size:11px;opacity:.5;margin-top:4px">Figtree — body copy, labels, ingredient names (unchanged from Organic)</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h6 style="margin:0 0 16px;opacity:.55;text-transform:uppercase;letter-spacing:.06em;font-size:12px">Shape</h6>
+    <div style="display:flex;gap:32px;align-items:center;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div style="width:120px;height:64px;border-radius:8px;background:#efefef;border:1px solid var(--color-divider)"></div>
+        <span style="font-size:12px;opacity:.6">Cards, buttons, tags — 8px radius</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div style="width:44px;height:44px;border-radius:50%;border:2px solid #8a8a8a"></div>
+        <span style="font-size:12px;opacity:.6">Tap targets (checkboxes, +/-) — circular, min 44px</span>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h6 style="margin:0 0 16px;opacity:.55;text-transform:uppercase;letter-spacing:.06em;font-size:12px">Buttons</h6>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <button type="button" class="btn btn-primary" style="background:#333333;color:#fff;border-radius:8px;padding:12px 20px">Plan the bake</button>
+      <button type="button" class="btn btn-secondary" style="border-radius:8px;padding:12px 20px">Pause</button>
+      <button type="button" class="btn btn-ghost" style="border-radius:8px;padding:12px 20px;color:#000">Back to plan</button>
+    </div>
+  </div>
+
+  <div>
+    <h6 style="margin:0 0 16px;opacity:.55;text-transform:uppercase;letter-spacing:.06em;font-size:12px">Tags &amp; segmented control</h6>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <span class="tag" style="border-radius:8px;background:#333333;color:#fff">at +20 min mark</span>
+        <span class="tag" style="border-radius:8px;background:oklch(94% 0.06 140)">Broccoli</span>
+        <span class="tag tag-outline" style="border-radius:8px">400°F</span>
+      </div>
+      <div class="seg" style="width:280px;border-radius:8px">
+        <label class="seg-opt" style="flex:1;justify-content:center;background:#e6e6e6;color:#111">All</label>
+        <label class="seg-opt" style="flex:1;justify-content:center">Vegetables</label>
+        <label class="seg-opt" style="flex:1;justify-content:center">Proteins</label>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h6 style="margin:0 0 16px;opacity:.55;text-transform:uppercase;letter-spacing:.06em;font-size:12px">Cards</h6>
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+      <div class="card elev-sm" style="background:#fff;border:1px solid #444;border-radius:8px;width:220px">
+        <div class="card-kicker" style="color:#000">Now in the oven</div>
+        <div class="card-title" style="font-size:16px">Cherry tomatoes</div>
+      </div>
+      <div class="card elev-sm" style="background:#efefef;border-radius:8px;width:220px">
+        <div class="card-kicker" style="color:#000">Before you start cooking</div>
+        <div class="card-title" style="font-size:15px">Prep done</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const dot = (bg) => ({ width: '18px', height: '18px', borderRadius: '50%', background: bg, flex: 'none' });
+    return {
+      colorRoles: [
+        { name: 'Background', value: '#ffffff', usage: 'App background (overrides Organic cream)', swatchStyle: { width: '100%', height: '64px', borderRadius: '8px', background: '#ffffff', border: '1px solid var(--color-divider)' } },
+        { name: 'Text', value: '#111111', usage: 'Body copy, headings', swatchStyle: { width: '100%', height: '64px', borderRadius: '8px', background: '#111111' } },
+        { name: 'Accent', value: 'oklch(62% 0.16 125)', usage: 'Selection fill, progress bar (yellow-green)', swatchStyle: { width: '100%', height: '64px', borderRadius: '8px', background: 'oklch(62% 0.16 125)' } },
+        { name: 'Dark neutral', value: '#333333', usage: 'Primary CTAs, selected temp/tag', swatchStyle: { width: '100%', height: '64px', borderRadius: '8px', background: '#333333' } },
+        { name: 'Light neutral', value: '#efefef / #e6e6e6', usage: 'Card fills, selected segment', swatchStyle: { width: '100%', height: '64px', borderRadius: '8px', background: '#efefef', border: '1px solid var(--color-divider)' } },
+        { name: 'Outline', value: '#444444', usage: '"Now in the oven" card border', swatchStyle: { width: '100%', height: '64px', borderRadius: '8px', background: '#fff', border: '2px solid #444' } },
+      ],
+      ingredientSwatches: [
+        { name: 'Sweet potato', color: 'oklch(95% 0.06 55)', dotStyle: dot('color-mix(in oklch, oklch(95% 0.06 55) 55%, black)') },
+        { name: 'Brussels sprouts', color: 'oklch(95% 0.05 145)', dotStyle: dot('color-mix(in oklch, oklch(95% 0.05 145) 55%, black)') },
+        { name: 'Cherry tomatoes', color: 'oklch(94% 0.06 20)', dotStyle: dot('color-mix(in oklch, oklch(94% 0.06 20) 55%, black)') },
+        { name: 'Eggplant', color: 'oklch(93% 0.05 310)', dotStyle: dot('color-mix(in oklch, oklch(93% 0.05 310) 55%, black)') },
+        { name: 'Carrots', color: 'oklch(95% 0.07 50)', dotStyle: dot('color-mix(in oklch, oklch(95% 0.07 50) 55%, black)') },
+        { name: 'Cauliflower', color: 'oklch(97% 0.01 90)', dotStyle: dot('color-mix(in oklch, oklch(97% 0.01 90) 55%, black)') },
+        { name: 'Salmon fillet', color: 'oklch(94% 0.06 30)', dotStyle: dot('color-mix(in oklch, oklch(94% 0.06 30) 55%, black)') },
+        { name: 'Corn on the cob', color: 'oklch(94% 0.08 95)', dotStyle: dot('color-mix(in oklch, oklch(94% 0.08 95) 55%, black)') },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>
